@@ -239,6 +239,12 @@
     </style>
     <script>
       let queue = [];
+      let queue = []; // Store the queue of names
+
+function togglePhoneInput() {
+  const phoneInput = document.getElementById("phone-number");
+  phoneInput.style.display = document.getElementById("notifications").checked ? "block" : "none";
+}
 
       function addToQueue(event) {
         event.preventDefault();
@@ -250,6 +256,15 @@
           updateQueueDisplay();
           updateWaitTime();
         }
+function addToQueue(event) {
+  event.preventDefault(); // Prevent form from submitting normally
+
+  const name = document.getElementById("name").value;
+  if (name) {
+    queue.push(name); // Add the name to the queue array
+    updateQueueDisplay(); // Update the displayed queue
+    updateWaitTime();
+  }
 
         document.querySelector("form").reset();
       }
@@ -257,6 +272,9 @@
       function updateQueueDisplay() {
         const queueContainer = document.getElementById("queue-list");
         queueContainer.innerHTML = "";
+function updateQueueDisplay() {
+  const queueContainer = document.getElementById("queue-list");
+  queueContainer.innerHTML = ""; // Clear the current displayed queue
 
         queue.forEach((entry, index) => {
           const entryDiv = document.createElement("div");
@@ -314,6 +332,42 @@
           chatInput.style.display = "none";
         }
       }
+function sendMessage() {
+  const chatInput = document.getElementById("chat-input");
+  const chatMessages = document.getElementById("chat-messages");
+  const name = document.getElementById("name").value.trim() || "Anonymous"; // Default to "Anonymous" if no name is entered
+  const message = chatInput.querySelector("input").value.trim();
+
+  if (message) {
+    const messageElement = document.createElement("div");
+    messageElement.textContent = `${name}: ${message}`; // Display the name or "Anonymous" before the message
+    messageElement.style.padding = "5px";
+    messageElement.style.margin = "5px 0";
+    messageElement.style.background = "#d6eaf8";
+    messageElement.style.borderRadius = "5px";
+    chatMessages.appendChild(messageElement);
+    chatInput.querySelector("input").value = ""; // Clear the input field
+    chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the latest message
+  }
+}
+
+// Toggle chat box open/close
+function toggleChatBox() {
+  const chatBox = document.getElementById("chat-box");
+  const chatMessages = document.getElementById("chat-messages");
+  const chatInput = document.getElementById("chat-input");
+  const inputField = chatInput.querySelector("input");
+
+  if (chatBox.style.height === "50px") { // If minimized
+    chatBox.style.height = "400px"; // Expand chat box
+    chatMessages.style.display = "block"; // Show messages
+    chatInput.style.display = "flex"; // Show input field and send button
+  } else {
+    chatBox.style.height = "50px"; // Minimize chat box
+    chatMessages.style.display = "none"; // Hide messages
+    chatInput.style.display = "none"; // Hide input field and send button
+  }
+}
     </script>
   </head>
   <body>
