@@ -45,7 +45,7 @@
         right: 20px;
         bottom: 20px;
         width: 300px;
-        height: 400px;
+        height: 50px; /* Start with a minimized height */
         background-color: white;
         border: 2px solid #a6cce6;
         border-radius: 10px;
@@ -53,15 +53,20 @@
         flex-direction: column;
         padding: 10px;
         box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        transition: height 0.3s ease; /* Smooth transition for resizing */
       }
       .chat-messages {
         flex: 1;
         overflow-y: auto;
         border-bottom: 1px solid #ccc;
         padding: 5px;
+        display: none; /* Hide chat messages initially */
       }
       .chat-input {
         display: flex;
+        justify-content: space-between;
+        padding: 5px;
+        display: none; /* Hide input and send button initially */
       }
       .chat-input input {
         flex: 1;
@@ -70,10 +75,24 @@
       .chat-input button {
         padding: 5px 10px;
       }
+      .chat-box-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+      }
+      .chat-box-header h3 {
+        margin: 0;
+      }
+      .chat-box-header button {
+        background-color: transparent;
+        border: none;
+        font-size: 16px;
+      }
       h1 {
-      text-align: center;
-      font-size: 2em;
-      color: #4a90e2;
+        text-align: center;
+        font-size: 2em;
+        color: #4a90e2;
       }
       p {
         text-align: center;
@@ -125,20 +144,38 @@
         const chatInput = document.getElementById("chat-input");
         const chatMessages = document.getElementById("chat-messages");
         const name = document.getElementById("name").value.trim() || "Anonymous"; // Default to "Anonymous" if no name is entered
-        const message = chatInput.value.trim();
+        const message = chatInput.querySelector("input").value.trim();
   
-      if (message) {
-        const messageElement = document.createElement("div");
-        messageElement.textContent = `${name}: ${message}`; // Display the name or "Anonymous" before the message
-        messageElement.style.padding = "5px";
-        messageElement.style.margin = "5px 0";
-        messageElement.style.background = "#d6eaf8";
-        messageElement.style.borderRadius = "5px";
-        chatMessages.appendChild(messageElement);
-        chatInput.value = ""; // Clear the input field
-        chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the latest message
+        if (message) {
+          const messageElement = document.createElement("div");
+          messageElement.textContent = `${name}: ${message}`; // Display the name or "Anonymous" before the message
+          messageElement.style.padding = "5px";
+          messageElement.style.margin = "5px 0";
+          messageElement.style.background = "#d6eaf8";
+          messageElement.style.borderRadius = "5px";
+          chatMessages.appendChild(messageElement);
+          chatInput.querySelector("input").value = ""; // Clear the input field
+          chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the latest message
+        }
       }
-    }
+
+      // Toggle chat box open/close
+      function toggleChatBox() {
+        const chatBox = document.getElementById("chat-box");
+        const chatMessages = document.getElementById("chat-messages");
+        const chatInput = document.getElementById("chat-input");
+        const inputField = chatInput.querySelector("input");
+
+        if (chatBox.style.height === "50px") { // If minimized
+          chatBox.style.height = "400px"; // Expand chat box
+          chatMessages.style.display = "block"; // Show messages
+          chatInput.style.display = "flex"; // Show input field and send button
+        } else {
+          chatBox.style.height = "50px"; // Minimize chat box
+          chatMessages.style.display = "none"; // Hide messages
+          chatInput.style.display = "none"; // Hide input field and send button
+        }
+      }
     </script>
   </head>
   <body>
@@ -171,14 +208,18 @@
       <h2>Queue:</h2>
       <div id="wait-time">Estimated Wait Time: 0 minutes</div>
       <div id="queue-list"></div>
-      
     </div>
-    <div class="chat-box">
-      <h3>Live Chat</h3>
+
+    <div id="chat-box" class="chat-box">
+      <div class="chat-box-header" onclick="toggleChatBox()">
+        <h3>Live Chat</h3>
+        <button>⯆</button> <!-- Arrow icon for opening/closing -->
+      </div>
       <div id="chat-messages" class="chat-messages"></div>
-      <div class="chat-input">
-        <input type="text" id="chat-input" placeholder="Ask a question...">
+      <div id="chat-input" class="chat-input">
+        <input type="text" placeholder="Ask a question...">
         <button onclick="sendMessage()">Send</button>
       </div>
+    </div>
   </body>
 </html>
