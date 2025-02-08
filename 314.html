@@ -1,7 +1,75 @@
-<html>
+<html> 
   <head>
     <title>314 Queue</title>
     <style>
+      body {
+        background-color: floralwhite;
+        font-family: Arial, sans-serif;
+      }
+      /* Style for the input fields */
+      input[type="text"], textarea {
+        font-size: 14px;
+        padding: 10px;
+        border-radius: 10px;
+        border: 2px solid #a6cce6;
+        background-color: #f7f8fa;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        margin-bottom: 15px;
+      }
+
+      input[type="text"]:focus, textarea:focus {
+        outline: none;
+        border-color: #357ab7;
+        box-shadow: 0 0 0 3px rgba(53, 122, 183, 0.3);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      /* Placeholder styling */
+      ::placeholder {
+        color: #bbb;
+        font-style: italic;
+      }
+
+      /* Style for the queue buttons */
+      button {
+        font-size: 14px; /* Smaller font size */
+        padding: 8px 16px; /* Adjust padding for a smaller button */
+        border-radius: 20px; /* Round the corners for a "cuter" look */
+        background-color: #92d1fb; /* Blue color */
+        color: white; /* White text */
+        border: none; /* Remove the default border */
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        cursor: pointer; /* Change the cursor to a pointer */
+        transition: all 0.3s ease; /* Smooth transition for effects */
+      }
+
+      /* Hover effect for a cuter button interaction */
+      button:hover {
+        background-color: #357ab7; /* Slightly darker blue on hover */
+        transform: scale(1.05); /* Slightly enlarge the button on hover */
+      }
+
+      /* Focus effect for accessibility */
+      button:focus {
+        outline: none; /* Remove the default outline */
+        box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.5); /* Add a blue outline on focus */
+      }
+
+      .queue-entry {
+        margin: 10px 0;
+        font-size: 18px;
+        padding: 15px;
+        background-color: #d6eaf8; /* Light blue background */
+        border-radius: 8px; /* Rounded corners */
+        border: 2px solid #a6cce6; /* Light blue border */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for a lifted effect */
+        text-align: left; /* Align text to the left */
+      }
 
 @font-face {
           font-family: 'MyCustomFont';
@@ -240,6 +308,20 @@
     <script>
       let queue = [];
 
+      function addToQueue(event) {
+        event.preventDefault(); // Prevent form from submitting normally
+
+        const name = document.getElementById("name").value;
+        const description = document.getElementById("description").value;
+
+        if (name && description) {
+          queue.push({ name, description }); // Add both name and description to the queue
+          updateQueueDisplay(); // Update the displayed queue
+          updateWaitTime();
+        }
+      }
+
+        // Clear the form fields after submission
 function togglePhoneInput() {
   const phoneInput = document.getElementById("phone-number");
   phoneInput.style.display = document.getElementById("notifications").checked ? "block" : "none";
@@ -256,7 +338,8 @@ function togglePhoneInput() {
           updateWaitTime();
         }
       }
-        function addToQueue(event) {
+
+function addToQueue(event) {
   event.preventDefault(); // Prevent form from submitting normally
 
   const name = document.getElementById("name").value;
@@ -266,29 +349,37 @@ function togglePhoneInput() {
     updateWaitTime();
   }
 
-  document.querySelector("form").reset(); // Reset form after submission
-}
+        document.querySelector("form").reset();
+      }
 
-      
+      function updateQueueDisplay() {
+        const queueContainer = document.getElementById("queue-list");
+        queueContainer.innerHTML = "";
+      }
 
 function updateQueueDisplay() {
   const queueContainer = document.getElementById("queue-list");
   queueContainer.innerHTML = ""; // Clear the current displayed queue
 
-  queue.forEach((entry, index) => {
-    const entryDiv = document.createElement("div");
-    entryDiv.classList.add("queue-entry");
+        queue.forEach((entry, index) => {
+          const entryDiv = document.createElement("div");
+          entryDiv.classList.add("queue-entry");
 
-    const nameElement = document.createElement("h3");
-    nameElement.textContent = `${index + 1}. ${entry.name}`;
-    entryDiv.appendChild(nameElement);
+          const nameElement = document.createElement("h3");
+          nameElement.textContent = `${index + 1}. ${entry.name}`;
+          entryDiv.appendChild(nameElement);
 
-    queueContainer.appendChild(entryDiv);
-  });
-}
+          const descriptionElement = document.createElement("p");
+          descriptionElement.textContent = entry.description;
+          entryDiv.appendChild(descriptionElement);
+
+          queueContainer.appendChild(entryDiv);
+        });
+      }
 
       function updateWaitTime() {
         const waitTimeContainer = document.getElementById("wait-time");
+        waitTimeContainer.textContent = `Total Number of People in Queue: ${queue.length}`;
         const estimatedWaitTime = queue.length * 10;
         waitTimeContainer.textContent = `Estimated Wait Time: ${estimatedWaitTime} minutes`;
       }
@@ -296,6 +387,12 @@ function updateQueueDisplay() {
       function sendMessage() {
         const chatInput = document.getElementById("chat-input");
         const chatMessages = document.getElementById("chat-messages");
+        const name = document.getElementById("name").value.trim() || "Anonymous"; // Default to "Anonymous" if no name is entered
+        const message = chatInput.value.trim();
+
+        if (message) {
+          const messageElement = document.createElement("div");
+          messageElement.textContent = `${name}: ${message}`; // Display the name or "Anonymous" before the message
         const name = document.getElementById("name").value.trim() || "Anonymous";
         const message = chatInput.querySelector("input").value.trim();
 
@@ -307,26 +404,30 @@ function updateQueueDisplay() {
           messageElement.style.background = "#d6eaf8";
           messageElement.style.borderRadius = "5px";
           chatMessages.appendChild(messageElement);
+          chatInput.value = ""; // Clear the input field
+          chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the latest message
+        }
+      }
           chatInput.querySelector("input").value = "";
           chatMessages.scrollTop = chatMessages.scrollHeight;
         }
-      }
+      
 
       function toggleChatBox() {
-  const chatBox = document.getElementById("chat-box");
-  const chatMessages = document.getElementById("chat-messages");
-  const chatInput = document.getElementById("chat-input");
+        const chatBox = document.getElementById("chat-box");
+        const chatMessages = document.getElementById("chat-messages");
+        const chatInput = document.getElementById("chat-input");
 
-  if (chatBox.style.height === "50px") { // If minimized
-    chatBox.style.height = "400px"; // Expand chat box
-    chatMessages.style.display = "block"; // Show messages
-    chatInput.style.display = "flex"; // Show input field and send button
-  } else {
-    chatBox.style.height = "50px"; // Minimize chat box
-    chatMessages.style.display = "none"; // Hide messages
-    chatInput.style.display = "none"; // Hide input field and send button
-  }
-}
+        if (chatBox.style.height === "50px") {
+          chatBox.style.height = "400px";
+          chatMessages.style.display = "block";
+          chatInput.style.display = "flex";
+        } else {
+          chatBox.style.height = "50px";
+          chatMessages.style.display = "none";
+          chatInput.style.display = "none";
+        }
+      }
 function sendMessage() {
   const chatInput = document.getElementById("chat-input");
   const chatMessages = document.getElementById("chat-messages");
@@ -395,31 +496,27 @@ function toggleChatBox() {
           <img src="./photos/wantedPoster.png" alt="poster 3">
       </div>
     </div>
-    
+
     <div class="form-container">
       <h2>Request Help</h2>
       <form onsubmit="addToQueue(event)">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
-
-        <label for="eid">EID:</label>
-        <input type="text" id="eid" name="eid" required>
-
-        <label for="description">Brief Description:</label>
-        <textarea id="description" name="description" required></textarea>
+        <input type="text" id="name" name="name" placeholder="Enter your name:" required>
+        <input type="text" id="eid" name="eid" placeholder="Enter your EID:" required>
+        <textarea id="description" name="description" placeholder="Brief description of your issue:" required></textarea>
 
         <div class="checkbox-container">
           <input type="checkbox" id="notifications" name="notifications">
           <label for="notifications">Receive Alerts?</label>
         </div>
 
+        <input type="text" id="phone-number" name="phone-number" placeholder="Enter phone number">
         <button type="submit">Submit</button>
       </form>
     </div>
 
     <div class="queue-container">
       <h2>Queue:</h2>
-      <div id="wait-time">Estimated Wait Time: 0 minutes</div>
+      <div id="wait-time">Total Number of People in Queue: 0</div>
       <div id="queue-list"></div>
     </div>
 
