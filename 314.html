@@ -6,6 +6,16 @@
         background-color: floralwhite;
         font-family: Arial, sans-serif;
       }
+      .queue-entry {
+        margin: 10px 0;
+        font-size: 18px;
+        padding: 15px;
+        background-color: #d6eaf8; /* Light blue background */
+        border-radius: 8px; /* Rounded corners */
+        border: 2px solid #a6cce6; /* Light blue border */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for a lifted effect */
+        text-align: left; /* Align text to the left */
+      }
 
       .images-container {
         display: flex;
@@ -18,7 +28,6 @@
         height: auto;
         border-radius: 10px; /* Optional: gives images rounded corners */
       }
-
       .form-container {
         background-color: #d6eaf8; /* Pale blue */
         padding: 20px;
@@ -45,6 +54,12 @@
       #phone-number {
         display: none;
       }
+      #submit-help-button {
+        margin-top: 20px;
+      }
+      form label, form input, form textarea, form .checkbox-container {
+        margin-bottom: 15px; /* Adds 15px of space below each element */
+      } 
       .queue-container {
         margin-top: 30px;
         text-align: center;
@@ -114,38 +129,56 @@
       }
     </style>
     <script>
-      let queue = []; // Store the queue of names
+      let queue = []; // Store the queue of names and descriptions
 
-      function togglePhoneInput() {
-        const phoneInput = document.getElementById("phone-number");
-        phoneInput.style.display = document.getElementById("notifications").checked ? "block" : "none";
+function addToQueue(event) {
+    event.preventDefault(); // Prevent form from submitting normally
+
+    const name = document.getElementById("name").value;
+    const description = document.getElementById("description").value;
+    
+    if (name && description) {
+        queue.push({ name, description }); // Add both name and description to the queue
+        updateQueueDisplay(); // Update the displayed queue
+        updateWaitTime();
+    }
+
+    // Clear the form fields after submission
+    document.querySelector("form").reset();
+}
+
+function updateQueueDisplay() {
+    const queueContainer = document.getElementById("queue-list");
+    queueContainer.innerHTML = ""; // Clear the current displayed queue
+
+    queue.forEach((entry, index) => {
+      const entryDiv = document.createElement("div");
+      entryDiv.classList.add("queue-entry");
+
+      // Display the name and position in the queue
+      const nameElement = document.createElement("div");
+      nameElement.textContent = `${index + 1}. ${entry.name}`; // Display the queue number and name
+      entryDiv.appendChild(nameElement);
+      if (queue.length === 0) {
+      const emptyMessage = document.createElement("div");
+      emptyMessage.classList.add("queue-entry");
+      emptyMessage.textContent = "The queue is currently empty"; // Message for an empty queue
+      queueContainer.appendChild(emptyMessage);
+    } else {
+      const positionElement = document.createElement("div");
+      if (index === 0) {
+          positionElement.textContent = "Up next"; // Display "Up next" for the first person
+      } else if (index === 1) {
+          positionElement.textContent = `${index} person ahead of you`; // Show how many people are ahead
+      } else {
+          positionElement.textContent = `${index} people ahead of you`; // Show how many people are ahead
       }
+      entryDiv.appendChild(positionElement);
+      queueContainer.appendChild(entryDiv);
+    }
+  });
+}
 
-      function addToQueue(event) {
-        event.preventDefault(); // Prevent form from submitting normally
-
-        const name = document.getElementById("name").value;
-        if (name) {
-          queue.push(name); // Add the name to the queue array
-          updateQueueDisplay(); // Update the displayed queue
-          updateWaitTime();
-        }
-
-        // Clear the form fields after submission
-        document.querySelector("form").reset();
-      }
-
-      function updateQueueDisplay() {
-        const queueContainer = document.getElementById("queue-list");
-        queueContainer.innerHTML = ""; // Clear the current displayed queue
-
-        queue.forEach((name, index) => {
-          const entry = document.createElement("div");
-          entry.classList.add("queue-entry");
-          entry.textContent = `${index + 1}. ${name}`; // Display the queue number and name
-          queueContainer.appendChild(entry);
-        });
-      }
 
       function updateWaitTime() {
         const waitTimeContainer = document.getElementById("wait-time");
@@ -157,38 +190,20 @@
         const chatInput = document.getElementById("chat-input");
         const chatMessages = document.getElementById("chat-messages");
         const name = document.getElementById("name").value.trim() || "Anonymous"; // Default to "Anonymous" if no name is entered
-        const message = chatInput.querySelector("input").value.trim();
+        const message = chatInput.value.trim();
   
-        if (message) {
-          const messageElement = document.createElement("div");
-          messageElement.textContent = `${name}: ${message}`; // Display the name or "Anonymous" before the message
-          messageElement.style.padding = "5px";
-          messageElement.style.margin = "5px 0";
-          messageElement.style.background = "#d6eaf8";
-          messageElement.style.borderRadius = "5px";
-          chatMessages.appendChild(messageElement);
-          chatInput.querySelector("input").value = ""; // Clear the input field
-          chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the latest message
-        }
+      if (message) {
+        const messageElement = document.createElement("div");
+        messageElement.textContent = `${name}: ${message}`; // Display the name or "Anonymous" before the message
+        messageElement.style.padding = "5px";
+        messageElement.style.margin = "5px 0";
+        messageElement.style.background = "#d6eaf8";
+        messageElement.style.borderRadius = "5px";
+        chatMessages.appendChild(messageElement);
+        chatInput.value = ""; // Clear the input field
+        chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the latest message
       }
-
-      // Toggle chat box open/close
-      function toggleChatBox() {
-        const chatBox = document.getElementById("chat-box");
-        const chatMessages = document.getElementById("chat-messages");
-        const chatInput = document.getElementById("chat-input");
-        const inputField = chatInput.querySelector("input");
-
-        if (chatBox.style.height === "50px") { // If minimized
-          chatBox.style.height = "400px"; // Expand chat box
-          chatMessages.style.display = "block"; // Show messages
-          chatInput.style.display = "flex"; // Show input field and send button
-        } else {
-          chatBox.style.height = "50px"; // Minimize chat box
-          chatMessages.style.display = "none"; // Hide messages
-          chatInput.style.display = "none"; // Hide input field and send button
-        }
-      }
+    }
     </script>
   </head>
   <body>
@@ -216,11 +231,11 @@
 
         <div class="checkbox-container">
           <input type="checkbox" id="notifications" name="notifications" onclick="togglePhoneInput()">
-          <label for="notifications">Receive Notifications?</label>
+          <label for="notifications">Receive Alerts?</label>
         </div>
 
         <input type="text" id="phone-number" name="phone-number" placeholder="Enter phone number">
-        <button type="submit">Submit</button>
+        <button id="submit-help-button" type="submit">Submit</button>
       </form>
     </div>
 
