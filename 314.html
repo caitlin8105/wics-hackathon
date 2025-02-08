@@ -40,6 +40,46 @@
         margin: 5px 0;
         font-size: 18px;
       }
+      .chat-box {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        width: 300px;
+        height: 400px;
+        background-color: white;
+        border: 2px solid #a6cce6;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        border-bottom: 1px solid #ccc;
+        padding: 5px;
+      }
+      .chat-input {
+        display: flex;
+      }
+      .chat-input input {
+        flex: 1;
+        padding: 5px;
+      }
+      .chat-input button {
+        padding: 5px 10px;
+      }
+      h1 {
+      text-align: center;
+      font-size: 2em;
+      color: #4a90e2;
+      }
+      p {
+        text-align: center;
+        font-size: 1.2em;
+        color: #333;
+      }
     </style>
     <script>
       let queue = []; // Store the queue of names
@@ -73,9 +113,30 @@
           queueContainer.appendChild(entry);
         });
       }
+
+      function sendMessage() {
+        const chatInput = document.getElementById("chat-input");
+        const chatMessages = document.getElementById("chat-messages");
+        const name = document.getElementById("name").value.trim() || "Anonymous"; // Default to "Anonymous" if no name is entered
+        const message = chatInput.value.trim();
+  
+      if (message) {
+        const messageElement = document.createElement("div");
+        messageElement.textContent = `${name}: ${message}`; // Display the name or "Anonymous" before the message
+        messageElement.style.padding = "5px";
+        messageElement.style.margin = "5px 0";
+        messageElement.style.background = "#d6eaf8";
+        messageElement.style.borderRadius = "5px";
+        chatMessages.appendChild(messageElement);
+        chatInput.value = ""; // Clear the input field
+        chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the latest message
+      }
+    }
     </script>
   </head>
   <body>
+    <h1>CS314 TA Help Hours</h1>
+    <p>Location: GDC Room 3.100</p>
     <div class="form-container">
       <h2>Request Help</h2>
       <form onsubmit="addToQueue(event)">
@@ -101,6 +162,13 @@
     <div class="queue-container">
       <h2>Queue:</h2>
       <div id="queue-list"></div>
+    </div>
+    <div class="chat-box">
+      <h3>Live Chat</h3>
+      <div id="chat-messages" class="chat-messages"></div>
+      <div class="chat-input">
+        <input type="text" id="chat-input" placeholder="Ask a question...">
+        <button onclick="sendMessage()">Send</button>
     </div>
   </body>
 </html>
