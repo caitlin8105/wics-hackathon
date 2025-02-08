@@ -72,6 +72,7 @@
         border: 2px solid #a6cce6; /* Light blue border */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for a lifted effect */
         text-align: left; /* Align text to the left */
+      }
 
 @font-face {
           font-family: 'MyCustomFont';
@@ -114,17 +115,6 @@
       .form-container h2 {
         margin-bottom: 20px;
         color: #333;
-      }
-
-      .checkbox-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-      }
-
-      #phone-number {
-        display: none;
       }
 
       label,
@@ -281,18 +271,15 @@
         background-color: transparent;
         border: none;
         font-size: 16px;
-<<<<<<< HEAD
       }
+
       h1 {
         font-family: 'Rye', serif;
         text-align: center;
         font-size: 2em;
-=======
->>>>>>> 33f8a66b3c3934afda9e4ab069b7abce3a8ebcc8
         color: #4a90e2;
         cursor: pointer;
       }
-<<<<<<< HEAD
       .rye-regular {
         font-family: "Rye", serif;
         font-weight: 400;
@@ -302,7 +289,7 @@
         text-align: center;
         font-size: 1.2em;
         color: #333;
-=======
+      }
 
       .chat-messages {
         flex: 1;
@@ -335,12 +322,11 @@
 
       .chat-input button:hover {
         background-color: #357ab7;
->>>>>>> 33f8a66b3c3934afda9e4ab069b7abce3a8ebcc8
       }
+      
     </style>
     <script>
       let queue = [];
-      let queue = []; // Store the queue of names
 
       function addToQueue(event) {
         event.preventDefault(); // Prevent form from submitting normally
@@ -353,6 +339,7 @@
           updateQueueDisplay(); // Update the displayed queue
           updateWaitTime();
         }
+      }
 
         // Clear the form fields after submission
 function togglePhoneInput() {
@@ -370,6 +357,8 @@ function togglePhoneInput() {
           updateQueueDisplay();
           updateWaitTime();
         }
+      }
+
 function addToQueue(event) {
   event.preventDefault(); // Prevent form from submitting normally
 
@@ -385,8 +374,9 @@ function addToQueue(event) {
 
       function updateQueueDisplay() {
         const queueContainer = document.getElementById("queue-list");
-        queueContainer.innerHTML = ""; // Clear the current displayed queue
         queueContainer.innerHTML = "";
+      }
+
 function updateQueueDisplay() {
   const queueContainer = document.getElementById("queue-list");
   queueContainer.innerHTML = ""; // Clear the current displayed queue
@@ -395,27 +385,6 @@ function updateQueueDisplay() {
           const entryDiv = document.createElement("div");
           entryDiv.classList.add("queue-entry");
 
-          // Display the name and position in the queue
-          const nameElement = document.createElement("div");
-          nameElement.textContent = `${index + 1}. ${entry.name}`; // Display the queue number and name
-          entryDiv.appendChild(nameElement);
-          if (queue.length === 0) {
-            const emptyMessage = document.createElement("div");
-            emptyMessage.classList.add("queue-entry");
-            emptyMessage.textContent = "The queue is currently empty"; // Message for an empty queue
-            queueContainer.appendChild(emptyMessage);
-          } else {
-            const positionElement = document.createElement("div");
-            if (index === 0) {
-                positionElement.textContent = "Up next"; // Display "Up next" for the first person
-            } else if (index === 1) {
-                positionElement.textContent = `${index} person ahead of you`; // Show how many people are ahead
-            } else {
-                positionElement.textContent = `${index} people ahead of you`; // Show how many people are ahead
-            }
-            entryDiv.appendChild(positionElement);
-            queueContainer.appendChild(entryDiv);
-          }
           const nameElement = document.createElement("h3");
           nameElement.textContent = `${index + 1}. ${entry.name}`;
           entryDiv.appendChild(nameElement);
@@ -462,7 +431,7 @@ function updateQueueDisplay() {
           chatInput.querySelector("input").value = "";
           chatMessages.scrollTop = chatMessages.scrollHeight;
         }
-      }
+      
 
       function toggleChatBox() {
         const chatBox = document.getElementById("chat-box");
