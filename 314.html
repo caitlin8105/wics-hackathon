@@ -239,7 +239,6 @@
     </style>
     <script>
       let queue = [];
-      let queue = []; // Store the queue of names
 
 function togglePhoneInput() {
   const phoneInput = document.getElementById("phone-number");
@@ -256,7 +255,8 @@ function togglePhoneInput() {
           updateQueueDisplay();
           updateWaitTime();
         }
-function addToQueue(event) {
+      }
+        function addToQueue(event) {
   event.preventDefault(); // Prevent form from submitting normally
 
   const name = document.getElementById("name").value;
@@ -266,31 +266,26 @@ function addToQueue(event) {
     updateWaitTime();
   }
 
-        document.querySelector("form").reset();
-      }
+  document.querySelector("form").reset(); // Reset form after submission
+}
 
-      function updateQueueDisplay() {
-        const queueContainer = document.getElementById("queue-list");
-        queueContainer.innerHTML = "";
+      
+
 function updateQueueDisplay() {
   const queueContainer = document.getElementById("queue-list");
   queueContainer.innerHTML = ""; // Clear the current displayed queue
 
-        queue.forEach((entry, index) => {
-          const entryDiv = document.createElement("div");
-          entryDiv.classList.add("queue-entry");
+  queue.forEach((entry, index) => {
+    const entryDiv = document.createElement("div");
+    entryDiv.classList.add("queue-entry");
 
-          const nameElement = document.createElement("h3");
-          nameElement.textContent = `${index + 1}. ${entry.name}`;
-          entryDiv.appendChild(nameElement);
+    const nameElement = document.createElement("h3");
+    nameElement.textContent = `${index + 1}. ${entry.name}`;
+    entryDiv.appendChild(nameElement);
 
-          const descriptionElement = document.createElement("p");
-          descriptionElement.textContent = entry.description;
-          entryDiv.appendChild(descriptionElement);
-
-          queueContainer.appendChild(entryDiv);
-        });
-      }
+    queueContainer.appendChild(entryDiv);
+  });
+}
 
       function updateWaitTime() {
         const waitTimeContainer = document.getElementById("wait-time");
@@ -318,20 +313,20 @@ function updateQueueDisplay() {
       }
 
       function toggleChatBox() {
-        const chatBox = document.getElementById("chat-box");
-        const chatMessages = document.getElementById("chat-messages");
-        const chatInput = document.getElementById("chat-input");
+  const chatBox = document.getElementById("chat-box");
+  const chatMessages = document.getElementById("chat-messages");
+  const chatInput = document.getElementById("chat-input");
 
-        if (chatBox.style.height === "50px") {
-          chatBox.style.height = "400px";
-          chatMessages.style.display = "block";
-          chatInput.style.display = "flex";
-        } else {
-          chatBox.style.height = "50px";
-          chatMessages.style.display = "none";
-          chatInput.style.display = "none";
-        }
-      }
+  if (chatBox.style.height === "50px") { // If minimized
+    chatBox.style.height = "400px"; // Expand chat box
+    chatMessages.style.display = "block"; // Show messages
+    chatInput.style.display = "flex"; // Show input field and send button
+  } else {
+    chatBox.style.height = "50px"; // Minimize chat box
+    chatMessages.style.display = "none"; // Hide messages
+    chatInput.style.display = "none"; // Hide input field and send button
+  }
+}
 function sendMessage() {
   const chatInput = document.getElementById("chat-input");
   const chatMessages = document.getElementById("chat-messages");
