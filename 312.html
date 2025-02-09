@@ -6,11 +6,13 @@
     <title>312 Queue</title>
     <style>
       body {
-        background-image: url('./photos/gingham.png');
+        background-image: url('./photos/background.jpg');
         background-size: cover;
         background-position: center;
         font-family: Arial, sans-serif;
       }
+
+    
       /* Style for the input fields */
       input[type="text"], textarea {
         font-size: 14px;
@@ -176,11 +178,11 @@
 
 /* New images container - smaller images on top */
 .new-images-container {
-  padding-top: 140px;
+  padding-top: 102px;
   position: absolute;
   display: flex;
   justify-content: center;
-  gap: 300px;  /* Adjusts space between images */
+  gap: 250px;  /* Adjusts space between images */
   width: 100%;
   top: 0;
   z-index: 2;
@@ -193,7 +195,7 @@
 }
 
 .new-images-container img {
-  width: 90px;  /* Increase the size of the new images */
+  width: 70px;  /* Increase the size of the new images */
   height: auto;
   border-radius: 10px;
   position: absolute;
@@ -209,7 +211,7 @@
 }
 
 .images-container img {
-  width: 200px;  /* Adjust this for the size of the large images */
+  width: 150px;  /* Adjust this for the size of the large images */
   height: auto;
   border-radius: 10px;
   position: relative;
@@ -217,11 +219,11 @@
 
 .image-text {
   position: absolute;
-  top: 95%;  /* Positions the text below the image */
+  top: 60%;  /* Positions the text below the image */
   text-align: center;
-  margin-top: 70px;  /* Adds space between image and text */
+  margin-top: 57px;  /* Adds space between image and text */
   font-family: 'Trebuchet MS';
-  font-size: 1.4em;  /* Adjust text size */
+  font-size: 1.1em;  /* Adjust text size */
   color: #333;
   width: -100%;  /* Ensures the text is centered under the image */
   white-space: nowrap;
@@ -316,90 +318,49 @@
         background-color: #357ab7;
       }
 
-      .rectangle-background {
-         position: relative;
-         top: 0;
-         left: 50%;
-         width: 90%;   /* Adjust the width to make it slightly smaller than the screen */
-         background-color: floralwhite;
-         transform: translate(-50%, -50%);  /* Centers it both horizontally and vertically */
-         z-index: -1; /* Keeps it under other content */
-         border-radius: 30px;
-}
+      h2{
+        font-family: 'Trebuchet MS';
+      }
 
     </style>
     <script>
       let queue = [];
 
-      function addToQueue(event) {
-        event.preventDefault(); // Prevent form from submitting normally
-
-        const name = document.getElementById("name").value;
-        const description = document.getElementById("description").value;
-
-        if (name && description) {
-          queue.push({ name, description }); // Add both name and description to the queue
-          updateQueueDisplay(); // Update the displayed queue
-          updateWaitTime();
-        }
-      }
-
-      function addToQueue(event) {
-        event.preventDefault();
-        const name = document.getElementById("name").value;
-        const description = document.getElementById("description").value;
-
-        if (name && description) {
-          queue.push({ name, description });
-          updateQueueDisplay();
-          updateWaitTime();
-        }
-      }
-
 function addToQueue(event) {
   event.preventDefault(); // Prevent form from submitting normally
 
-  const name = document.getElementById("name").value;
+  const name = document.getElementById("name").value.trim();
+  const description = document.getElementById("description").value.trim();
+
   if (name) {
-    queue.push(name); // Add the name to the queue array
+    queue.push({ name, description }); // Add both name and description to the queue
     updateQueueDisplay(); // Update the displayed queue
     updateWaitTime();
+    document.querySelector("form").reset(); // Reset form after submission
   }
-
-        document.querySelector("form").reset();
-      }
-
-      function updateQueueDisplay() {
-        const queueContainer = document.getElementById("queue-list");
-        queueContainer.innerHTML = "";
-      }
+}
 
 function updateQueueDisplay() {
   const queueContainer = document.getElementById("queue-list");
   queueContainer.innerHTML = ""; // Clear the current displayed queue
 
-        queue.forEach((entry, index) => {
-          const entryDiv = document.createElement("div");
-          entryDiv.classList.add("queue-entry");
+  queue.forEach((entry, index) => {
+    const entryDiv = document.createElement("div");
+    entryDiv.classList.add("queue-entry");
 
-          const nameElement = document.createElement("h3");
-          nameElement.textContent = `${index + 1}. ${entry.name}`;
-          entryDiv.appendChild(nameElement);
+    const nameElement = document.createElement("h3");
+    nameElement.textContent = `${index + 1}. ${entry.name}`;
+    entryDiv.appendChild(nameElement);
 
-          const descriptionElement = document.createElement("p");
-          descriptionElement.textContent = entry.description;
-          entryDiv.appendChild(descriptionElement);
+    queueContainer.appendChild(entryDiv);
+  });
+}
 
-          queueContainer.appendChild(entryDiv);
-        });
-      }
+function updateWaitTime() {
+  const waitTimeContainer = document.getElementById("wait-time");
+  waitTimeContainer.textContent = `Total Number of People in Queue: ${queue.length}`;
+}
 
-      function updateWaitTime() {
-        const waitTimeContainer = document.getElementById("wait-time");
-        waitTimeContainer.textContent = `Total Number of People in Queue: ${queue.length}`;
-        const estimatedWaitTime = queue.length * 10;
-        waitTimeContainer.textContent = `Estimated Wait Time: ${estimatedWaitTime} minutes`;
-      }
       function toggleChatBox() {
         const chatBox = document.getElementById("chat-box");
         const chatMessages = document.getElementById("chat-messages");
@@ -481,15 +442,41 @@ function sendMessage() {
     chatMessages.scrollTop = chatMessages.scrollHeight; // Scroll to the latest message
   }
 }
+const menuButton = document.getElementById("menuButton");
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("overlay");
 
+        menuButton.addEventListener("click", () => {
+            const isOpen = sidebar.classList.toggle("open");
+            overlay.classList.toggle("show", isOpen);
+            menuButton.innerHTML = isOpen ? "&times;" : "&#9776;";
+        });
+
+        overlay.addEventListener("click", () => {
+            sidebar.classList.remove("open");
+            overlay.classList.remove("show");
+            menuButton.innerHTML = "&#9776;";
+        });
+
+        function updateWaitTime() {
+  const waitTimeContainer = document.getElementById("wait-time");
+  const estimatedTimeContainer = document.getElementById("estimated-time");
+
+  const estimatedTimePerPerson = 5; 
+  const totalEstimatedTime = queue.length * estimatedTimePerPerson;
+
+  waitTimeContainer.textContent = `Total Number of People in Queue: ${queue.length}`;
+  estimatedTimeContainer.textContent = `Estimated Wait Time: ${totalEstimatedTime} minutes`;
+}
     </script>
   </head>
   <body>
-    <div class="rectangle-background"></div>
 
+   
     <h1 class = "rye-regular">CS312 TA Help Hours</h1>
     <p>Location: GDC Room 3.100</p>
     <p>Office Hours: 2:00 - 6:00 PM</p>
+
     
     <div class="images-wrapper">
       <!-- New Images Container: These images will appear on top of the old ones -->
@@ -530,14 +517,14 @@ function sendMessage() {
 
     <div class="queue-container">
       <h2>Queue:</h2>
-      <div id="wait-time">Total Number of People in Queue: 0</div>
-      <div id="queue-list"></div>
+      <p><div id="wait-time">Total Number of People in Queue: 0</div></p>
+      <p id="estimated-time">Estimated Wait Time: 0 minutes</p>
     </div>
 
     <div id="chat-box" class="chat-box">
       <div class="chat-box-header" onclick="toggleChatBox()">
         <h3>Live Chat</h3>
-        <button>⯆</button> <!-- Arrow icon for opening/closing -->
+        <button>⯆</button> 
       </div>
       <div id="chat-messages" class="chat-messages"></div>
       <div id="chat-input" class="chat-input">
