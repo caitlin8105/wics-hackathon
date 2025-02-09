@@ -321,7 +321,7 @@
       h2{
         font-family: 'Trebuchet MS';
       }
-
+      
     </style>
     <script>
       let queue = [];
@@ -457,26 +457,14 @@ const menuButton = document.getElementById("menuButton");
             overlay.classList.remove("show");
             menuButton.innerHTML = "&#9776;";
         });
-
-        function updateWaitTime() {
-  const waitTimeContainer = document.getElementById("wait-time");
-  const estimatedTimeContainer = document.getElementById("estimated-time");
-
-  const estimatedTimePerPerson = 5; 
-  const totalEstimatedTime = queue.length * estimatedTimePerPerson;
-
-  waitTimeContainer.textContent = `Total Number of People in Queue: ${queue.length}`;
-  estimatedTimeContainer.textContent = `Estimated Wait Time: ${totalEstimatedTime} minutes`;
-}
     </script>
   </head>
   <body>
-
-   
+    
+    <div class="overlay" id="overlay"></div>
     <h1 class = "rye-regular">CS312 TA Help Hours</h1>
     <p>Location: GDC Room 3.100</p>
     <p>Office Hours: 2:00 - 6:00 PM</p>
-
     
     <div class="images-wrapper">
       <!-- New Images Container: These images will appear on top of the old ones -->
@@ -517,14 +505,14 @@ const menuButton = document.getElementById("menuButton");
 
     <div class="queue-container">
       <h2>Queue:</h2>
-      <p><div id="wait-time">Total Number of People in Queue: 0</div></p>
-      <p id="estimated-time">Estimated Wait Time: 0 minutes</p>
+      <div id="wait-time">Total Number of People in Queue: 0</div>
+      <div id="queue-list"></div>
     </div>
 
     <div id="chat-box" class="chat-box">
       <div class="chat-box-header" onclick="toggleChatBox()">
         <h3>Live Chat</h3>
-        <button>⯆</button> 
+        <button>⯆</button> <!-- Arrow icon for opening/closing -->
       </div>
       <div id="chat-messages" class="chat-messages"></div>
       <div id="chat-input" class="chat-input">
