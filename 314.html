@@ -357,8 +357,21 @@ function updateQueueDisplay() {
 }
 
 function updateWaitTime() {
+  const estimatedTimePerPerson = 5; 
+  const totalEstimatedTime = queue.length * estimatedTimePerPerson;
   const waitTimeContainer = document.getElementById("wait-time");
   waitTimeContainer.textContent = `Total Number of People in Queue: ${queue.length}`;
+}
+
+function updateWaitTime() {
+  const waitTimeContainer = document.getElementById("wait-time");
+  const estimatedTimeContainer = document.getElementById("estimated-time");
+
+  const estimatedTimePerPerson = 5; 
+  const totalEstimatedTime = queue.length * estimatedTimePerPerson;
+
+  waitTimeContainer.textContent = `Total Number of People in Queue: ${queue.length}`;
+  estimatedTimeContainer.textContent = `Estimated Wait Time: ${totalEstimatedTime} minutes`;
 }
 
       function toggleChatBox() {
@@ -376,6 +389,7 @@ function updateWaitTime() {
           chatInput.style.display = "none";
         }
       }
+
       function sendMessage() {
         const chatInput = document.getElementById("chat-input");
         const chatMessages = document.getElementById("chat-messages");
@@ -462,7 +476,7 @@ const menuButton = document.getElementById("menuButton");
   <body>
     
     <div class="overlay" id="overlay"></div>
-    <h1 class = "rye-regular">CS4 TA Help Hours</h1>
+    <h1 class = "rye-regular">CS314 TA Help Hours</h1>
     <p>Location: GDC Room 3.100</p>
     <p>Office Hours: 2:00 - 6:00 PM</p>
     
@@ -506,6 +520,7 @@ const menuButton = document.getElementById("menuButton");
     <div class="queue-container">
       <h2>Queue:</h2>
       <div id="wait-time">Total Number of People in Queue: 0</div>
+      <p id="estimated-time">Estimated Wait Time: 0 minutes</p>
       <div id="queue-list"></div>
     </div>
 
